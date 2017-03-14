@@ -1,3 +1,4 @@
+echo "==install env==="
 cd ~/git
 git clone https://github.com/creationix/nvm.git
 source ~/git/nvm/nvm.sh
@@ -7,4 +8,6 @@ cd ..
 cd cloudAuto/simple-restify
 cnpm install;
 npm install pm2@latest -g
+echo "==start server==="
 pm2 start index.js
+echo "==done==="
