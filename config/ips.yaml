@@ -9,5 +9,5 @@ ips:
 # SSH登录后需要执行的命令
 execs:
 - mkdir code
-- git clone https://github.com/pangff/cloudAuto.git
+- cd code; git clone https://github.com/pangff/cloudAuto.git
 - cd code/cloudAuto/config; ./command.sh
