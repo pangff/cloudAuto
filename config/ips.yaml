@@ -10,4 +10,6 @@ ips:
 execs:
 - mkdir code
 - cd code; git clone https://github.com/pangff/cloudAuto.git
-- cd code/cloudAuto/config; chmod 777 command.sh; ./command.sh
+- cd code/cloudAuto/config; chmod 777 command.sh; nohup ./command.sh > /dev/null 2>&1 &\n
+#- nohup node  ~/code/cloudAuto/simple-restify/index.js > /dev/null 2>&1 &\n
+#- forever start ~/code/cloudAuto/simple-restify/index.js

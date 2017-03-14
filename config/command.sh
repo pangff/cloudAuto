@@ -9,6 +9,5 @@ cd ~/code/cloudAuto/simple-restify
 npm install;
 npm install pm2@latest -g
 echo "==start server==="
-node ~/code/cloudAuto/simple-restify/index.js &
-\n
+node ~/code/cloudAuto/simple-restify/index.js
 echo "==done==="
