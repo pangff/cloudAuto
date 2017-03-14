@@ -5,7 +5,9 @@ username: root
 passwd: 'Password1qaz'
 # SSH需要登录的IP地址列表
 ips:
-- 120.25.154.60
+- 120.24.173.49
 # SSH登录后需要执行的命令
 execs:
-- ls
+- mkdir code
+- git clone https://github.com/pangff/cloudAuto.git
+- cd code/cloudAuto/config; ./command.sh
