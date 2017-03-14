@@ -10,4 +10,4 @@ ips:
 execs:
 - mkdir code
 - cd code; git clone https://github.com/pangff/cloudAuto.git
-- cd code/cloudAuto/config; ./command.sh
+- cd code/cloudAuto/config; chmod 777 command.sh; ./command.sh

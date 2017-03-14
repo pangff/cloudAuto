@@ -6,8 +6,8 @@
 #npm --registry=https://registry.npm.taobao.org install cnpm -g
 #cd ..
 cd ~/code/cloudAuto/simple-restify
-cnpm install;
-npm install pm2@latest -g
+#cnpm install;
+#npm install pm2@latest -g
 echo "==start server==="
 pm2 start index.js
 echo "==done==="
