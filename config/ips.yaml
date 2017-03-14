@@ -1,15 +1,16 @@
----
-# SSH登录用户名称
-username: root
-# SSH登录用户密码
-passwd: 'Password1qaz'
-# SSH需要登录的IP地址列表
-ips:
-- 120.24.173.49
-# SSH登录后需要执行的命令
-execs:
-- mkdir code
-- cd code; git clone https://github.com/pangff/cloudAuto.git
-- cd code/cloudAuto/config; chmod 777 command.sh; nohup ./command.sh > /dev/null 2>&1 &\n
-#- nohup node  ~/code/cloudAuto/simple-restify/index.js > /dev/null 2>&1 &\n
-#- forever start ~/code/cloudAuto/simple-restify/index.js
+#---
+## SSH登录用户名称
+#username: root
+## SSH登录用户密码
+#passwd: 'xxxx'
+## SSH需要登录的IP地址列表
+#ips:
+#- x.x.x.x
+## SSH登录后需要执行的命令
+#execs:
+##- mkdir code
+##- cd code; git clone https://github.com/pangff/cloudAuto.git
+##- cd code/cloudAuto/config; chmod 777 command.sh; ./command.sh > /dev/null 2>&1 &\n
+##- nohup node  ~/code/cloudAuto/simple-restify/index.js > /dev/null 2>&1 &\n
+#- cd ~/code/cloudAuto/simple-restify; nohup node index.js > /dev/null 2>&1 &\n
+##- nohup forever start ~/code/cloudAuto/simple-restify/index.js > /dev/null 2>&1 &\n

@@ -1,10 +1,13 @@
 __author__ = 'pangff'
 import json
 import client;
+import urllib2;
+import time
 from aliyunsdkecs.request.v20140526 import CreateInstanceRequest
 from aliyunsdkecs.request.v20140526 import StartInstanceRequest
 from aliyunsdkecs.request.v20140526 import AllocatePublicIpAddressRequest
 import yaml
+import threading
 
 # {"InstanceId":"i-wz9csdigjpkey122lmlg","RequestId":"2D3AB98D-6F3B-4296-9B3D-74709C979D57"}
 def createInstance(clt):
@@ -41,7 +44,7 @@ def allocatePublicIpAddress(clt,instanceId):
     request.set_InstanceId(instanceId)
     result = clt.do_action(request)
     print "allocatePublicIpAddress=="+result
-    return result;
+    return  json.loads(result);
 
 
 def writeToFile(instanceId):
@@ -49,17 +52,43 @@ def writeToFile(instanceId):
     f.write(instanceId+'\n')  # python will convert \n to os.linesep
     f.close()
 
+def clearFile():
+    f = open('./config/instances.txt', 'w')
+    f.write("")  # python will convert \n to os.linesep
+    f.close()
 
+
+def checkServiceStatus(ip):
+    print 'checkServiceStatus-start...';
+    attempts = 0
+    while attempts<999999:
+        try:
+            result = urllib2.urlopen("http://"+ip+":3100/hello/123",timeout=60).read();
+            print 'checkServiceStatus='+result;
+            return result;
+        except Exception, e:
+            attempts += 1;
+            time.sleep(2)
+            print e
+            print 'service not started...retry'+str(attempts)+"tiems";
 
 def main():
+    clearFile();
+    millis = int(round(time.time() * 1000))
     clt = client.initClient();
     instanceInfo = createInstance(clt);
     if instanceInfo['InstanceId']!="":
         writeToFile(instanceInfo['InstanceId']);
-        allocatePublicIpAddress(clt,instanceInfo['InstanceId'])
+        ipInfo = allocatePublicIpAddress(clt,instanceInfo['InstanceId'])
         startInstance(clt,instanceInfo['InstanceId']);
+        serverInfo = checkServiceStatus(ipInfo['IpAddress']);
+        millisEnd = int(round(time.time() * 1000))
+        timeUse = (millisEnd-millis)
+        print "service-start-use:"+str(timeUse)+"ms"
+        print serverInfo;
     else:
         print "error to create instance"
+
 
 if __name__ == '__main__':
     main()

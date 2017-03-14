@@ -1,10 +1,10 @@
 __author__ = 'pangff'
 import time
-
+import json
 import client;
 from aliyunsdkecs.request.v20140526 import DeleteInstanceRequest
 from aliyunsdkecs.request.v20140526 import StopInstanceRequest
-
+import os
 
 def destoryInstance(clt,instanceId):
     print "destoryInstance==start:"+instanceId
@@ -14,7 +14,16 @@ def destoryInstance(clt,instanceId):
     request.set_InstanceId(instanceId)
     result = clt.do_action(request)
     print "destoryInstance==end:("+instanceId+")"+result
-    return result;
+    return json.loads(result);
+
+def destoryInstanceWithRetry(clt,instanceId):
+    destoryInfo = destoryInstance(clt,instanceId)
+    times = 0;
+    if 'Code' in destoryInfo and destoryInfo['Code']=='IncorrectInstanceStatus':
+        time.sleep(2)
+        times+=1;
+        print "destoryInstanceWithRetry==times:"+str(times);
+        destoryInstanceWithRetry(clt,instanceId)
 
 def stopInstance(clt,instanceId):
     print "stopInstance==start:"+instanceId
@@ -32,19 +41,21 @@ def readInstances():
     return file.readlines()
 
 def main():
+    millis = int(round(time.time() * 1000))
     clt = client.initClient();
     instanceList = readInstances();
     instanceCount = len(instanceList);
     for i in range(0, instanceCount):
         intanceId = instanceList[i].replace("\n","");
-        stopInstance(clt,intanceId)
+        if intanceId!='':
+            stopInstance(clt,intanceId)
+            destoryInstanceWithRetry(clt,intanceId);
 
-    print "wait 1 minute (instance stop)..:";
-    time.sleep(60)
-
-    for i in range(0, instanceCount):
-        intanceId = instanceList[i].replace("\n","");
-        destoryInstance(clt,intanceId);
+    millisEnd = int(round(time.time() * 1000))
+    timeUse = (millisEnd-millis)
+    print "instance-release-used:"+str(timeUse)+"ms"
+    if os.path.exists("./config/instances.txt"):
+        os.remove("./config/instances.txt")
 
 if __name__ == '__main__':
     main()
